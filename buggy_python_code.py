@@ -22,10 +22,17 @@ def print_nametag(format_string, person):
 
 
 def fetch_website(urllib_version, url):
-    # Import the requested version (2 or 3) of urllib
-    exec(f"import urllib{urllib_version} as urllib", globals())
+    # Map valid versions to their corresponding modules
+    urllib_modules = {
+        "2": "urllib2",
+        "3": "urllib3"
+    }
+    # Validate the requested version
+    if urllib_version not in urllib_modules:
+        raise ValueError(f"Invalid urllib version: {urllib_version}")
+    # Dynamically import the requested module
+    urllib = __import__(urllib_modules[urllib_version])
     # Fetch and print the requested URL
- 
     try:
         http = urllib.PoolManager()
         thing = http.request('GET', url)
